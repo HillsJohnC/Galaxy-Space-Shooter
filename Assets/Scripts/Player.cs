@@ -9,11 +9,16 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _laserPrefab;
     [SerializeField]
-    private float _fireRate = 0.5f;
+    private GameObject _tripleShotPrefab;
+    [SerializeField]
+    private float _fireRate = 0.25f;
     private float _canFire = -1f;
     [SerializeField]
     private int _lives = 3;
     private SpawnManager _spawnManager;
+
+    [SerializeField]
+    private bool _isTripleShotActive = false;
 
         // Start is called before the first frame update
     void Start()
@@ -21,7 +26,7 @@ public class Player : MonoBehaviour
         transform.position = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
        
-        if (_spawnManager != null)
+        if (_spawnManager == null)
         {
             Debug.LogError("The Spawn Manager is NULL");
         }
@@ -47,23 +52,23 @@ public class Player : MonoBehaviour
 
         transform.Translate(direction * _speed * Time.deltaTime);
 
-        transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.8f, 0), 0);
-
-        if (transform.position.x > 11.3f)
-        {
-            transform.position = new Vector3(-11.3f, transform.position.y, 0);
-        }
-        else if (transform.position.x < -11.3f)
-        {
-            transform.position = new Vector3(11.3f, transform.position.y, 0);
-        }
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x, -9.5f, 9.5f), Mathf.Clamp(transform.position.y, -3.8f, 0), 0);
     }
 
     void FireLaser()
            
     {
         _canFire = Time.time + _fireRate;
-        Instantiate(_laserPrefab, transform.position + new Vector3(0, 0.8f, 0), Quaternion.identity);
+
+        if (_isTripleShotActive == true)
+        {
+            Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
+        }
+        else
+        {
+            Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.025f, 0), Quaternion.identity);
+        }
+        
     }
 
     public void Damage()
@@ -76,5 +81,18 @@ public class Player : MonoBehaviour
             Destroy(this.gameObject);
       }
     }
+
+    public void TripleShotActive()
+    {
+        _isTripleShotActive = true;
+        StartCoroutine(TripleShotPowerDownRoutine());
+    }
     
+ 
+    IEnumerator TripleShotPowerDownRoutine()
+    {
+        yield return new WaitForSeconds(10.0f);
+        _isTripleShotActive = false;
+    }
+
 }
