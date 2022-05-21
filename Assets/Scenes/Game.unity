@@ -317,7 +317,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.00017428398, y: -0.02997744}
@@ -583,6 +583,66 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 931fea605baaa5d46b8b52c0da9c6d03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyPrefab: {fileID: 6588467298655406965, guid: 0ce2a330b4255e548a2cee50c98e87ae, type: 3}
+  _enemyPrefab: {fileID: 6588467298655406965, guid: cb97d0fd6e35ef94288ba3b021db7b2d, type: 3}
   _enemyContainer: {fileID: 1548139379}
-  _tripleShotPowerupPrefab: {fileID: 8586532499379342300, guid: 6564e7bca2bc643449b8f76d96bb0b7e, type: 3}
+  _powerups:
+  - {fileID: 8586532499379342300, guid: 33984354251112f4c9a399e91b548d62, type: 3}
+  - {fileID: 3003298225320131923, guid: 0e21d80bcc53feb45967915f0f09597a, type: 3}
+  - {fileID: 0}
+--- !u!1001 &4132920269741881328
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 104913858278003378, guid: 0e21d80bcc53feb45967915f0f09597a, type: 3}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 104913858278003378, guid: 0e21d80bcc53feb45967915f0f09597a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 104913858278003378, guid: 0e21d80bcc53feb45967915f0f09597a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.92
+      objectReference: {fileID: 0}
+    - target: {fileID: 104913858278003378, guid: 0e21d80bcc53feb45967915f0f09597a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 104913858278003378, guid: 0e21d80bcc53feb45967915f0f09597a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 104913858278003378, guid: 0e21d80bcc53feb45967915f0f09597a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 104913858278003378, guid: 0e21d80bcc53feb45967915f0f09597a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 104913858278003378, guid: 0e21d80bcc53feb45967915f0f09597a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 104913858278003378, guid: 0e21d80bcc53feb45967915f0f09597a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 104913858278003378, guid: 0e21d80bcc53feb45967915f0f09597a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 104913858278003378, guid: 0e21d80bcc53feb45967915f0f09597a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3003298225320131923, guid: 0e21d80bcc53feb45967915f0f09597a, type: 3}
+      propertyPath: m_Name
+      value: Speed_Powerup
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0e21d80bcc53feb45967915f0f09597a, type: 3}
