@@ -74,7 +74,7 @@ public class Enemy : MonoBehaviour
 
             if (_player != null)
             {
-                _player.AddScore(1);
+                _player.AddScore(10);
             }
 
             _enemyCollider.enabled = false;
