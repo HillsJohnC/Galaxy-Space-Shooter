@@ -6,7 +6,7 @@ public class Player : MonoBehaviour
 {
     [SerializeField]
     private float _speed = 3.5f;
-    private float _speedMultiplier = 2;
+    private float _speedMultiplier = 2;    
     [SerializeField]
     private GameObject _laserPrefab;
     [SerializeField]
@@ -20,7 +20,7 @@ public class Player : MonoBehaviour
 
     private bool _isTripleShotActive = false;
     private bool _isSpeedBoostActive = false;
-    private bool _isShieldsActive = false;
+    private bool _isShieldsActive = false;     
 
     [SerializeField]
     private GameObject _shieldVisualizer;
@@ -68,7 +68,8 @@ public class Player : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
+    {         
+          
         CalculateMovement();
 
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
@@ -91,6 +92,16 @@ public class Player : MonoBehaviour
         else
         {
             transform.Translate(direction * (_speed * _speedMultiplier) * Time.deltaTime);
+        }
+
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            transform.Translate(direction * (_speed * _speedMultiplier) * Time.deltaTime);
+        }
+
+        else if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            transform.Translate(direction * _speed * Time.deltaTime);
         }
 
 
@@ -179,5 +190,5 @@ public class Player : MonoBehaviour
     {
         _score += points;
         _uiManager.UpdateScore(_score);
-    } 
+    }    
 }
