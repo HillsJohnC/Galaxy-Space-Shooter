@@ -20,7 +20,10 @@ public class Player : MonoBehaviour
 
     private bool _isTripleShotActive = false;
     private bool _isSpeedBoostActive = false;
-    private bool _isShieldsActive = false;     
+    private bool _isShieldsActive = false;
+
+    [SerializeField]
+    private int _shieldLives;
 
     [SerializeField]
     private GameObject _shieldVisualizer;
@@ -38,9 +41,18 @@ public class Player : MonoBehaviour
     
     private AudioSource _audioSource;
 
+    SpriteRenderer shieldSprite;
+
         // Start is called before the first frame update
     void Start()
     {
+        shieldSprite = transform.Find ("Shields").GetComponentInChildren<SpriteRenderer>();
+
+        if (shieldSprite == null)
+        {
+            Debug.LogError("Shields is NULL.");
+        }
+
         transform.position = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
@@ -63,7 +75,7 @@ public class Player : MonoBehaviour
         else
         {
             _audioSource.clip = _laserSoundClip;
-        }
+        }        
     }
 
     // Update is called once per frame
@@ -130,13 +142,15 @@ public class Player : MonoBehaviour
     {
         if (_isShieldsActive == true)
         {
-            _isShieldsActive = false;
-            _shieldVisualizer.SetActive(false);
+            ShieldsDamage();
             return;
         }
-
-        _lives--;
-
+        
+        else
+        {
+            _lives--;
+        }
+        
         if (_lives == 2)
         {
             _leftEngine.SetActive(true);
@@ -182,13 +196,44 @@ public class Player : MonoBehaviour
 
     public void ShieldsActive()
     {
+        _shieldLives = 3;
+        shieldSprite.color = new Color(1f, 1f, 1f, 1f);
         _isShieldsActive = true;
         _shieldVisualizer.SetActive(true);
+    }
+
+    void ShieldNotActive()
+    {
+        _shieldLives = 0;
+        _isShieldsActive=false;
+        _shieldVisualizer.SetActive(false);
     }
 
     public void AddScore(int points)
     {
         _score += points;
         _uiManager.UpdateScore(_score);
-    }    
+    }
+
+    public void ShieldsDamage()
+    {
+
+        _shieldLives--;
+
+        if (_shieldLives == 2)
+        {
+            shieldSprite.color = new Color(1f, 1f, 1f, 0.66f);
+        }
+
+        else if (_shieldLives == 1)
+        {
+            shieldSprite.color = new Color(1f, 1f, 1f, 0.33f);
+        }
+
+        else if (_shieldLives < 1)
+        {
+            ShieldNotActive();
+        }
+        
+    }
 }
