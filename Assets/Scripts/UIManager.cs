@@ -5,9 +5,11 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    // Handle to text
+    private Player _player;
     [SerializeField]
     private Text _scoreText;
+    [SerializeField]
+    private Text _totalAmmoText;
     [SerializeField]
     private Image _LivesImg;
     [SerializeField]
@@ -23,6 +25,7 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _player = GameObject.Find("Player").GetComponent<Player>();
         _scoreText.text = "Score: " + 0;
         _gameOverText.gameObject.SetActive(false);
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
@@ -30,6 +33,15 @@ public class UIManager : MonoBehaviour
         if (_gameManager == null)
         {
             Debug.LogError("GameManager is NULL");
+        }
+    }
+    private void Update()
+    {
+        _totalAmmoText.text = "Ammo: " + _player._playerAmmo;
+
+        if (_player._playerAmmo < 0)
+        {
+            _totalAmmoText.color = Color.red;
         }
     }
 

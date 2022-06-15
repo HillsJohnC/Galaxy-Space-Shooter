@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
-{
+{    
     [SerializeField]
     private float _speed = 3.5f;
     private float _speedMultiplier = 2;    
@@ -14,6 +14,11 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _fireRate = 0.25f;
     private float _canFire = -1f;
+    public int _fullAmmo = 15;
+    public int _playerAmmo;
+    [SerializeField]
+    private bool _isThereAmmo = true;
+
     [SerializeField]
     private int _lives = 3;
     private SpawnManager _spawnManager;
@@ -45,7 +50,8 @@ public class Player : MonoBehaviour
 
         // Start is called before the first frame update
     void Start()
-    {
+    {       
+        _playerAmmo = _fullAmmo;
         shieldSprite = transform.Find ("Shields").GetComponentInChildren<SpriteRenderer>();
 
         if (shieldSprite == null)
@@ -86,7 +92,10 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
         {
-            FireLaser();
+            if (_isThereAmmo == true)
+            {
+                FireLaser();
+            }
         }
     }
 
@@ -135,6 +144,12 @@ public class Player : MonoBehaviour
         }
 
         _audioSource.Play();
+        _playerAmmo--;
+
+        if (_playerAmmo < 1)
+        {
+            _isThereAmmo = false;
+        }
         
     }
 
