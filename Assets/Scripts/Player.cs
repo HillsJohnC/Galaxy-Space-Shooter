@@ -45,7 +45,7 @@ public class Player : MonoBehaviour
     private AudioClip _laserSoundClip;
     
     private AudioSource _audioSource;
-
+    
     SpriteRenderer shieldSprite;
 
         // Start is called before the first frame update
@@ -178,7 +178,7 @@ public class Player : MonoBehaviour
         _uiManager.UpdateLives(_lives);
 
       if (_lives < 1)
-      {
+      {            
             _spawnManager.OnPlayerDeath();
             Destroy(this.gameObject);
       }
@@ -222,6 +222,11 @@ public class Player : MonoBehaviour
         _shieldLives = 0;
         _isShieldsActive=false;
         _shieldVisualizer.SetActive(false);
+    }
+
+    public void AmmoCollected()
+    {
+        _playerAmmo = 15;
     }
 
     public void AddScore(int points)
