@@ -13,8 +13,7 @@ public class Player : MonoBehaviour
     private GameObject _tripleShotPrefab;
     [SerializeField]
     private float _fireRate = 0.25f;
-    private float _canFire = -1f;
-    public int _fullAmmo = 15;
+    private float _canFire = -1f;    
     public int _playerAmmo;
     [SerializeField]
     private bool _isThereAmmo = true;
@@ -26,7 +25,7 @@ public class Player : MonoBehaviour
     private bool _isTripleShotActive = false;
     private bool _isSpeedBoostActive = false;
     private bool _isShieldsActive = false;
-
+    
     [SerializeField]
     private int _shieldLives;
 
@@ -50,8 +49,8 @@ public class Player : MonoBehaviour
 
         // Start is called before the first frame update
     void Start()
-    {       
-        _playerAmmo = _fullAmmo;
+    {
+        _playerAmmo = 25;
         shieldSprite = transform.Find ("Shields").GetComponentInChildren<SpriteRenderer>();
 
         if (shieldSprite == null)
@@ -186,8 +185,10 @@ public class Player : MonoBehaviour
 
     public void TripleShotActive()
     {
-        _isTripleShotActive = true;
+        _isTripleShotActive = true;        
         StartCoroutine(TripleShotPowerDownRoutine());
+        _playerAmmo = 25;
+        _isThereAmmo = true;
     }
     
  
@@ -226,13 +227,37 @@ public class Player : MonoBehaviour
 
     public void AmmoCollected()
     {
-        _playerAmmo = 15;
+        _playerAmmo = 25;
+        _isThereAmmo = true;
     }
-
+    
     public void AddScore(int points)
     {
         _score += points;
         _uiManager.UpdateScore(_score);
+    }
+
+    public void HealthCollected()
+
+    {
+        if (_lives < 3)
+        {
+            _lives++;
+            if (_lives == 3)
+            {
+                _leftEngine.SetActive(false);
+            }            
+            else if (_lives == 2)
+            {
+                _rightEngine.SetActive(false);
+            }
+
+            _uiManager.UpdateLives(_lives);
+        }
+        else
+        {
+            _lives = 3;
+        }
     }
 
     public void ShieldsDamage()
