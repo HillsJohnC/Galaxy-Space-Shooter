@@ -51,9 +51,7 @@ public class UIManager : MonoBehaviour
     }
 
     public void UpdateLives(int currentLives)
-    {
-        // Display img sprite
-        // Give it a new one based on the currentLives index
+    {        
         _LivesImg.sprite = _liveSprites[currentLives];
 
         if (currentLives == 0)

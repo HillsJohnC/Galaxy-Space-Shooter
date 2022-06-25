@@ -17,14 +17,10 @@ public class Asteroid : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        // Rotate object o the zed axis.
+    {        
         transform.Rotate(Vector3.forward * _rotateSpeed * Time.deltaTime);
     }
-
-    // Check for laser collision (Trigger)
-    // Instantiate explosion at the position of the asteroid (us)
-    // Destroy the explosion after 3 seconds.
+    
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Laser")

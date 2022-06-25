@@ -21,7 +21,7 @@ public class Enemy : MonoBehaviour
     {
         _player = GameObject.Find("Player").GetComponent<Player>();
         _audioSource = GetComponent<AudioSource>();
-        // Null check player
+       
         if (_player == null)
         {
             Debug.LogError("The Player is NULL");
