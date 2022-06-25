@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3564204575533447789}
   - component: {fileID: -4230750549725826011}
   - component: {fileID: -7489464369852717991}
-  - component: {fileID: 1619448427470420785}
+  - component: {fileID: -5435916257023220613}
   m_Layer: 0
   m_Name: Tri_Pro_Powerup
   m_TagString: Untagged
@@ -152,7 +152,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &1619448427470420785
+--- !u!114 &-5435916257023220613
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -161,9 +161,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1569210097948309494}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b88ab9dc8017a024d8856ad2c836620a, type: 3}
+  m_Script: {fileID: 11500000, guid: fd27d7c130c9db1478354003ae70160e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 3
-  _powerupID: 5
+  _rarePowerupID: 0
   _clip: {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}

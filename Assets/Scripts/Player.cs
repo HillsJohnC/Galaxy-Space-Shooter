@@ -219,7 +219,7 @@ public class Player : MonoBehaviour
 
     IEnumerator TriProPowerDownRoutine()
     {
-        yield return new WaitForSeconds(8.0f);
+        yield return new WaitForSeconds(5.0f);
         _isTriProActive = false;
     }
 
