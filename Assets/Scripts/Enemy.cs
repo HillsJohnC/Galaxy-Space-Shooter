@@ -5,7 +5,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField]
-    private float _speed = 4.0f;
+    private float _speed = 3.0f;
     [SerializeField]
     private GameObject _laserPrefab;
 
@@ -15,10 +15,12 @@ public class Enemy : MonoBehaviour
     private AudioSource _audioSource;
     private float _fireRate = 3.0f;
     private float _canFire = -1;
+    private int _movePattern;
 
     // Start is called before the first frame update
     void Start()
     {
+        _movePattern = Random.Range(0, 2);
         _player = GameObject.Find("Player").GetComponent<Player>();
         _audioSource = GetComponent<AudioSource>();
        
@@ -61,9 +63,21 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void CalculatMovement()
+    private void CalculatMovement()
     {
-        transform.Translate(Vector3.down * _speed * Time.deltaTime);
+        switch (_movePattern)
+        {
+            case 0:
+                transform.Translate(new Vector3(Mathf.Cos(Time.time), -1, 0) * _speed * Time.deltaTime);
+                break;
+            case 1:
+                transform.Translate(new Vector3(Mathf.Cos(Time.time), Mathf.Sin(Time.time), 0) * _speed * Time.deltaTime);
+                break;
+            default:
+                transform.Translate(Vector3.down * _speed * Time.deltaTime);
+                break;
+        }
+        
 
         if (_enemyCollider.enabled == false && transform.position.y < -5f)
         {
