@@ -15,10 +15,13 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Sprite[] _liveSprites;
     [SerializeField]
+    private Sprite[] _thrusterBarSprites;
+    [SerializeField]
+    private Image _thrusterBarImg;
+    [SerializeField]
     private Text _gameOverText;
     [SerializeField]
     private Text _restartText;
-
     private GameManager _gameManager;
 
 
@@ -51,7 +54,7 @@ public class UIManager : MonoBehaviour
     }
 
     public void UpdateLives(int currentLives)
-    {        
+    {
         _LivesImg.sprite = _liveSprites[currentLives];
 
         if (currentLives == 0)
@@ -59,7 +62,12 @@ public class UIManager : MonoBehaviour
             GameOverSequence();
         }
     }
-
+    public void UpdateThrusterBar(float currentThrusterValue)
+    {
+            _thrusterBarImg.sprite = _thrusterBarSprites[(int) currentThrusterValue];
+    }
+    
+    
     void GameOverSequence()
     {
         _gameManager.GameOver();

@@ -6,7 +6,9 @@ public class Player : MonoBehaviour
 {    
     [SerializeField]
     private float _speed = 3.5f;
-    private float _speedMultiplier = 2;    
+    private float _speedMultiplier = 2;
+    private float _thrusterValue = 1f;
+
     [SerializeField]
     private GameObject _laserPrefab;
     [SerializeField]
@@ -24,8 +26,7 @@ public class Player : MonoBehaviour
     private int _lives = 3;
     private SpawnManager _spawnManager;
 
-    private bool _isTripleShotActive = false;
-    private bool _isSpeedBoostActive = false;
+    private bool _isTripleShotActive = false;    
     private bool _isShieldsActive = false;
     private bool _isTriProActive = false;
     
@@ -108,27 +109,38 @@ public class Player : MonoBehaviour
 
         Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);
 
-        if (_isSpeedBoostActive == false)
+        if (Input.GetKey(KeyCode.LeftShift) && (_thrusterValue < 12f))
         {
-            transform.Translate(direction * _speed * Time.deltaTime);
+            transform.Translate(direction * (_speed * _speedMultiplier) * Time.deltaTime);
+            ThrusterTimer();
         }
+
         else
         {
-            transform.Translate(direction * (_speed * _speedMultiplier) * Time.deltaTime);
-        }
-
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            transform.Translate(direction * (_speed * _speedMultiplier) * Time.deltaTime);
-        }
-
-        else if (Input.GetKeyUp(KeyCode.LeftShift))
-        {
             transform.Translate(direction * _speed * Time.deltaTime);
+            if (!Input.GetKey(KeyCode.LeftShift))
+                ThrusterRegen();
         }
-
 
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, -9.5f, 9.5f), Mathf.Clamp(transform.position.y, -3.8f, 0), 0);
+    }
+
+    void ThrusterTimer()
+    {
+        if (_thrusterValue > 0f && _thrusterValue < 12f)
+        {
+            _uiManager.UpdateThrusterBar(_thrusterValue);
+            _thrusterValue += .04f;
+        }
+    }
+
+    void ThrusterRegen()
+    {
+        if (_thrusterValue > 1f)
+        {
+        _uiManager.UpdateThrusterBar(_thrusterValue);
+        _thrusterValue -= .008f;
+        }
     }
 
     void FireLaser()
@@ -225,16 +237,10 @@ public class Player : MonoBehaviour
 
     public void SpeedBoostActive()
     {
-        _isSpeedBoostActive = true;
-        StartCoroutine(SpeedBoostPowerDownRoutine());
+        _thrusterValue = 1;
+        _uiManager.UpdateThrusterBar(_thrusterValue);
     }
-
-    IEnumerator SpeedBoostPowerDownRoutine()
-    {
-        yield return new WaitForSeconds(8.0f);
-        _isSpeedBoostActive = false;
-    }
-
+    
     public void ShieldsActive()
     {
         _shieldLives = 3;
