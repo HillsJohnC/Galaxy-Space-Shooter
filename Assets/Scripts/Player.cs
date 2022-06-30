@@ -29,7 +29,7 @@ public class Player : MonoBehaviour
     private int _lives = 3;
     private SpawnManager _spawnManager;
 
-    private bool _isTripleShotActive = false;    
+    private bool _isTripleShotActive = false;
     private bool _isShieldsActive = false;
     private bool _isTriProActive = false;
     
@@ -178,7 +178,10 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
-        StartCoroutine(cameraShake.Shake(.15f, .4f));
+        if (_lives > 1)
+        {
+            StartCoroutine(cameraShake.Shake(.15f, .4f));
+        }        
 
         if (_isShieldsActive == true)
         {

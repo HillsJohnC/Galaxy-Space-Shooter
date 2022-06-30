@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 4
-  _laserPrefab: {fileID: 3792009199773211416, guid: 9c31d763c08a15e489aae94614689bf4, type: 3}
+  _laserPrefab: {fileID: 8189026899448172403, guid: 9c31d763c08a15e489aae94614689bf4, type: 3}
 --- !u!212 &1061291535968663561
 SpriteRenderer:
   m_ObjectHideFlags: 0
