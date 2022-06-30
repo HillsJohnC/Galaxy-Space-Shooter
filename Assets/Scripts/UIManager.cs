@@ -9,6 +9,10 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Text _scoreText;
     [SerializeField]
+    private int _maxAmmo = 25;
+    [SerializeField]
+    private int _playerAmmo;
+    [SerializeField]
     private Text _totalAmmoText;
     [SerializeField]
     private Image _LivesImg;
@@ -28,6 +32,7 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _playerAmmo = _maxAmmo;
         _player = GameObject.Find("Player").GetComponent<Player>();
         _scoreText.text = "Score: " + 0;
         _gameOverText.gameObject.SetActive(false);
@@ -40,7 +45,7 @@ public class UIManager : MonoBehaviour
     }
     private void Update()
     {
-        _totalAmmoText.text = "Ammo: " + _player._playerAmmo;
+        _totalAmmoText.text = "Ammo: " + _player._playerAmmo + " / " + _maxAmmo;
 
         if (_player._playerAmmo < 0)
         {

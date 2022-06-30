@@ -420,7 +420,7 @@ MonoBehaviour:
   _tripleShotPrefab: {fileID: 145183408903297049, guid: 8b59a0524a7b92d479ee92dd22202417, type: 3}
   _triProPrefab: {fileID: 1623188647756329010, guid: 9d4ae18ea30ddab4d821c770010ca923, type: 3}
   _fireRate: 0.25
-  _playerAmmo: 0
+  _playerAmmo: 25
   _isThereAmmo: 1
   _lives: 3
   _shieldLives: 0
@@ -1665,6 +1665,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _scoreText: {fileID: 555682350}
+  _maxAmmo: 25
   _totalAmmoText: {fileID: 1940538312}
   _LivesImg: {fileID: 32911273}
   _liveSprites:
@@ -2008,7 +2009,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 'Ammo: '
+  m_Text: 'Ammo:  /25'
 --- !u!222 &1940538313
 CanvasRenderer:
   m_ObjectHideFlags: 0
