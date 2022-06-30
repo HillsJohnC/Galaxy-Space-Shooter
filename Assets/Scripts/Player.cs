@@ -10,6 +10,9 @@ public class Player : MonoBehaviour
     private float _thrusterValue = 1f;
 
     [SerializeField]
+    public CameraShake cameraShake;
+
+    [SerializeField]
     private GameObject _laserPrefab;
     [SerializeField]
     private GameObject _tripleShotPrefab;
@@ -122,7 +125,7 @@ public class Player : MonoBehaviour
                 ThrusterRegen();
         }
 
-        transform.position = new Vector3(Mathf.Clamp(transform.position.x, -9.5f, 9.5f), Mathf.Clamp(transform.position.y, -3.8f, 0), 0);
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x, -9.5f, 9.5f), Mathf.Clamp(transform.position.y, -3.15f, 2f), 0);
     }
 
     void ThrusterTimer()
@@ -175,17 +178,15 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
+        StartCoroutine(cameraShake.Shake(.15f, .4f));
+
         if (_isShieldsActive == true)
         {
             ShieldsDamage();
             return;
-        }
-        
-        else
-        {
-            _lives--;
-        }
-        
+        }       
+            _lives--;        
+
         if (_lives == 2)
         {
             _leftEngine.SetActive(true);
@@ -274,6 +275,7 @@ public class Player : MonoBehaviour
         if (_lives < 3)
         {
             _lives++;
+
             if (_lives == 3)
             {
                 _leftEngine.SetActive(false);
