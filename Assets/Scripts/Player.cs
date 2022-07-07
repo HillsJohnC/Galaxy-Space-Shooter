@@ -317,4 +317,10 @@ public class Player : MonoBehaviour
         }
         
     }
+
+    public void AmmoDepleted()
+    {
+        _playerAmmo = 0;
+        _isThereAmmo = false;
+    }
 }

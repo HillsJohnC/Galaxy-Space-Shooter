@@ -420,7 +420,7 @@ MonoBehaviour:
   _tripleShotPrefab: {fileID: 145183408903297049, guid: 8b59a0524a7b92d479ee92dd22202417, type: 3}
   _triProPrefab: {fileID: 1623188647756329010, guid: 9d4ae18ea30ddab4d821c770010ca923, type: 3}
   _fireRate: 0.25
-  _playerAmmo: 25
+  _playerAmmo: 0
   _isThereAmmo: 1
   _lives: 3
   _shieldLives: 0
@@ -1631,7 +1631,7 @@ MonoBehaviour:
   - {fileID: 4589639437510429105, guid: fb16e622e0ee68b458488642291a6578, type: 3}
   - {fileID: 4270110198815210612, guid: 1771bba40a0e97b4896264cea6d57c55, type: 3}
   _rarePowerups:
-  - {fileID: 1623188647756329010, guid: 9d4ae18ea30ddab4d821c770010ca923, type: 3}
+  - {fileID: 1569210097948309494, guid: bece73c1571e7174f94945fd06fcaf55, type: 3}
 --- !u!1 &1645834505
 GameObject:
   m_ObjectHideFlags: 0
@@ -1666,6 +1666,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _scoreText: {fileID: 555682350}
   _maxAmmo: 25
+  _playerAmmo: 0
   _totalAmmoText: {fileID: 1940538312}
   _LivesImg: {fileID: 32911273}
   _liveSprites:
