@@ -4,31 +4,87 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject _enemyPrefab;
-    [SerializeField]
-    private GameObject _enemyContainer;
-    [SerializeField]
-    private GameObject[] _powerups;
-    [SerializeField]
-    private GameObject[] _rarePowerups;
-
+    [SerializeField] private GameObject _enemyPrefab;
+    [SerializeField] private GameObject _enemyContainer;
+    [SerializeField] private GameObject[] _powerups;
+    [SerializeField] private GameObject[] _rarePowerups;
     private bool _stopSpawning = false;
+    private bool _isWaveInitiated = true;
+    private int _waveCount = 1;
+    [SerializeField] private int _numberOfEnemies = 10;
+    [SerializeField] private int _enemiesSpawned = 0;
+    public int enemiesKilled;
+    private UIManager _uiManager;
+    private Player _player;
 
- 
+    private void Start()
+    {        
+        _player = GameObject.Find("Player").GetComponent<Player>();
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+
+        if (_player == null)
+        {
+            Debug.LogError("The Player is NULL!");
+        }
+
+        if (_uiManager == null)
+        {
+            Debug.LogError("The UIManager is NULL!!");
+        }
+    }
+
+
+    private void Update()
+    {
+        Wave();
+    }
+
+    private void Wave()
+    {
+        if (enemiesKilled >= _numberOfEnemies)
+        {
+            StopAllCoroutines();
+            enemiesKilled = 0;
+            _enemiesSpawned = 0;
+            _numberOfEnemies = (int)Mathf.Round(_numberOfEnemies + _numberOfEnemies / 1.5f);
+            _waveCount++;
+            _isWaveInitiated = true;
+            StartSpawning();
+        }
+    }
+
 
     public void StartSpawning()
     {
-        StartCoroutine(SpawnEnemyRoutine());
-        StartCoroutine(SpawnPowerupRoutine());
-        StartCoroutine(SpawnRarePowerupRoutine());
+        if (_isWaveInitiated != false && _player != null)
+        {
+            StartCoroutine(InitiateWave());
+        }
+        else
+        {
+            StartCoroutine(SpawnEnemyRoutine());
+            StartCoroutine(SpawnPowerupRoutine());
+            StartCoroutine(SpawnRarePowerupRoutine());
+        }
+    }
+
+    IEnumerator InitiateWave()
+    {
+        _uiManager.InitiateWave(_waveCount);
+        yield return new WaitForSeconds(1.0f);
+        _uiManager._initiateWave.gameObject.SetActive(true);
+        yield return new WaitForSeconds(3.0f);
+        _uiManager._initiateWave.gameObject.SetActive(false);
+        _isWaveInitiated = false;
+        StartSpawning();
     }
 
     IEnumerator SpawnEnemyRoutine()
     {
-        yield return new WaitForSeconds(5.0f);
-        while (_stopSpawning == false)
+        
+        while (_stopSpawning == false && _enemiesSpawned < _numberOfEnemies)
         {
+            _enemiesSpawned++;
             Vector3 posToSpawn = new Vector3(Random.Range(-8.5f, 8.5f), 7, 0);
             GameObject newEnemy = Instantiate(_enemyPrefab, posToSpawn, Quaternion.identity);
             newEnemy.transform.parent = _enemyContainer.transform;

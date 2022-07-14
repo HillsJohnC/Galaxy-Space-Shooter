@@ -4,25 +4,29 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField]
-    private float _speed = 3.0f;
-    [SerializeField]
-    private GameObject _laserPrefab;
-
+    [SerializeField] private float _speed = 3.0f;
+    [SerializeField] private GameObject _laserPrefab;
     private Player _player;
     private Animator _anim;
     private Collider2D _enemyCollider;
     private AudioSource _audioSource;
     private float _fireRate = 3.0f;
     private float _canFire = -1;
-    private int _movePattern;
-
+    public int _movePattern;
+    private SpawnManager _spawnManager;
+    
     // Start is called before the first frame update
     void Start()
     {
         _movePattern = Random.Range(0, 2);
         _player = GameObject.Find("Player").GetComponent<Player>();
         _audioSource = GetComponent<AudioSource>();
+        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+
+        if (_spawnManager == null)
+        {
+            Debug.LogError("The Spawn Manager is NULL");
+        }
        
         if (_player == null)
         {
@@ -47,7 +51,7 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CalculatMovement();
+        CalculateMovement();
 
         if (Time.time > _canFire)
         {
@@ -63,7 +67,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void CalculatMovement()
+    public void CalculateMovement()
     {
         switch (_movePattern)
         {
@@ -71,7 +75,7 @@ public class Enemy : MonoBehaviour
                 transform.Translate(new Vector3(Mathf.Cos(Time.time), -1, 0) * _speed * Time.deltaTime);
                 break;
             case 1:
-                transform.Translate(new Vector3(Mathf.Cos(Time.time), Mathf.Sin(Time.time), 0) * _speed * Time.deltaTime);
+                transform.Translate(new Vector3(Mathf.Cos(Time.time), Mathf.Sin(Time.time) - .1f, 0) * _speed * Time.deltaTime);
                 break;
             default:
                 transform.Translate(Vector3.down * _speed * Time.deltaTime);
@@ -93,34 +97,26 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Player")
+        if (other.tag == "Player" && _player != null)
         {
-            Player player = other.transform.GetComponent<Player>();
+            _player.Damage();
+            EnemyDestroyed();
+        }      
 
-            if (player != null)
-            {
-                player.Damage();
-            }
-
-            _enemyCollider.enabled = false;
-            _anim.SetTrigger("OnEnemyDeath");
-            _audioSource.Play();
-            Destroy(this.gameObject, 2.8f);         
-        }
-
-        if (other.tag == "Laser")
+        if (other.tag == "Laser" && _player != null)
         {
             Destroy(other.gameObject);
-
-            if (_player != null)
-            {
-                _player.AddScore(10);
-            }
-
-            _enemyCollider.enabled = false;
-            _anim.SetTrigger("OnEnemyDeath");
-            _audioSource.Play();
-            Destroy(this.gameObject, 2.8f);            
+            _player.AddScore(10);
+            EnemyDestroyed();
         }
+    }
+
+    private void EnemyDestroyed()
+    {
+        _enemyCollider.enabled = false;
+        _anim.SetTrigger("OnEnemyDeath");
+        _audioSource.Play();
+        _spawnManager.enemiesKilled++;
+        Destroy(this.gameObject, 2.8f);
     }
 }

@@ -6,51 +6,42 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     private Player _player;
-    [SerializeField]
-    private Text _scoreText;
-    [SerializeField]
-    private int _maxAmmo = 25;
-    [SerializeField]
-    private int _playerAmmo;
-    [SerializeField]
-    private Text _totalAmmoText;
-    [SerializeField]
-    private Image _LivesImg;
-    [SerializeField]
-    private Sprite[] _liveSprites;
-    [SerializeField]
-    private Sprite[] _thrusterBarSprites;
-    [SerializeField]
-    private Image _thrusterBarImg;
-    [SerializeField]
-    private Text _gameOverText;
-    [SerializeField]
-    private Text _restartText;
+    [SerializeField] private Text _scoreText;    
+    [SerializeField] public Text _totalAmmoText;
+    [SerializeField] private Image _LivesImg;
+    [SerializeField] private Sprite[] _liveSprites;
+    [SerializeField] private Sprite[] _thrusterBarSprites;
+    [SerializeField] private Image _thrusterBarImg;
+    [SerializeField] private Text _gameOverText;
+    [SerializeField] private Text _restartText;
+    [SerializeField] public Text _initiateWave;
     private GameManager _gameManager;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        _playerAmmo = _maxAmmo;
+        _totalAmmoText.text = "Ammo: " + 25 + " / 25";
         _player = GameObject.Find("Player").GetComponent<Player>();
         _scoreText.text = "Score: " + 0;
         _gameOverText.gameObject.SetActive(false);
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
+        _initiateWave.gameObject.SetActive(false);
 
         if (_gameManager == null)
         {
             Debug.LogError("GameManager is NULL");
         }
     }
-    private void Update()
-    {
-        _totalAmmoText.text = "Ammo: " + _player._playerAmmo + " / " + _maxAmmo;
 
-        if (_player._playerAmmo < 0)
-        {
-            _totalAmmoText.color = Color.red;
-        }
+    public void InitiateWave(int nextWave)
+    {
+        _initiateWave.text = "Wave: " + nextWave.ToString();
+    }
+
+    public void UpdateAmmo(int playerAmmo)
+    {
+        _totalAmmoText.text = "Ammo: " + playerAmmo + " / 25";
     }
 
     public void UpdateScore(int playerScore)

@@ -4,71 +4,45 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {    
-    [SerializeField]
-    private float _speed = 3.5f;
+    [SerializeField] private float _speed = 3.5f;
     private float _speedMultiplier = 2;
     private float _thrusterValue = 1f;
-
-    [SerializeField]
-    public CameraShake cameraShake;
-
-    [SerializeField]
-    private GameObject _laserPrefab;
-    [SerializeField]
-    private GameObject _tripleShotPrefab;
-    [SerializeField]
-    private GameObject _triProPrefab;
-    [SerializeField]
-    private float _fireRate = 0.25f;
+    [SerializeField] public CameraShake cameraShake;
+    [SerializeField] private GameObject _laserPrefab;
+    [SerializeField] private GameObject _tripleShotPrefab;
+    [SerializeField] private GameObject _triProPrefab;
+    [SerializeField] private float _fireRate = 0.25f;
     private float _canFire = -1f;    
-    public int _playerAmmo;
-    [SerializeField]
-    private bool _isThereAmmo = true;
-
-    [SerializeField]
-    private int _lives = 3;
+    private int _playerAmmo = 25;
+    [SerializeField] private bool _isThereAmmo = true;
+    [SerializeField] private int _lives = 3;
     private SpawnManager _spawnManager;
-
     private bool _isTripleShotActive = false;
     private bool _isShieldsActive = false;
-    private bool _isTriProActive = false;
-    
-    [SerializeField]
-    private int _shieldLives;
-
-    [SerializeField]
-    private GameObject _shieldVisualizer;
-
-    [SerializeField]
-    private GameObject _leftEngine, _rightEngine;
-        
-    [SerializeField]
-    private int _score;
-
+    private bool _isTriProActive = false;    
+    [SerializeField] private int _shieldLives;
+    [SerializeField] private GameObject _shieldVisualizer;
+    [SerializeField] private GameObject _leftEngine, _rightEngine;        
+    [SerializeField] private int _score;
     private UIManager _uiManager;
-
-    [SerializeField]
-    private AudioClip _laserSoundClip;
-    
+    [SerializeField] private AudioClip _laserSoundClip;    
     private AudioSource _audioSource;
     
     SpriteRenderer shieldSprite;
 
         // Start is called before the first frame update
     void Start()
-    {
-        _playerAmmo = 25;
+    {        
         shieldSprite = transform.Find ("Shields").GetComponentInChildren<SpriteRenderer>();
+        transform.position = new Vector3(0, 0, 0);
+        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        _audioSource = GetComponent<AudioSource>();
 
         if (shieldSprite == null)
         {
             Debug.LogError("Shields is NULL.");
         }
-
-        transform.position = new Vector3(0, 0, 0);
-        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
-        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
-        _audioSource = GetComponent<AudioSource>();
        
         if (_spawnManager == null)
         {
@@ -154,25 +128,34 @@ public class Player : MonoBehaviour
         if (_isTripleShotActive == true)
         {
             Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
+            _playerAmmo--;
         }
 
         else if (_isTriProActive == true)
         {
             Instantiate(_triProPrefab, transform.position, Quaternion.identity);
+            _playerAmmo--;
         }
 
         else
         {
             Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.025f, 0), Quaternion.identity);
+            _playerAmmo--;
         }
 
         _audioSource.Play();
-        _playerAmmo--;
 
         if (_playerAmmo < 1)
         {
             _isThereAmmo = false;
+            _uiManager._totalAmmoText.color = Color.red;            
         }
+        else
+        {
+            _uiManager._totalAmmoText.color = Color.white;
+        }
+
+        _uiManager.UpdateAmmo(_playerAmmo);
         
     }
 
@@ -230,7 +213,7 @@ public class Player : MonoBehaviour
         _isTriProActive = true;
         StartCoroutine(TriProPowerDownRoutine());
         _playerAmmo = 25;
-        _isThereAmmo= true;
+        _isThereAmmo = true;
     }
 
     IEnumerator TriProPowerDownRoutine()
@@ -263,6 +246,7 @@ public class Player : MonoBehaviour
     public void AmmoCollected()
     {
         _playerAmmo = 25;
+        _uiManager.UpdateAmmo(_playerAmmo);
         _isThereAmmo = true;
     }
     
