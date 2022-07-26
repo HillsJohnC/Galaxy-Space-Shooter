@@ -154,6 +154,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3935569283534159109}
+  - component: {fileID: 5028406410570146668}
   m_Layer: 0
   m_Name: Tri_Pro
   m_TagString: Untagged
@@ -178,6 +179,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5028406410570146668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1623188647756329010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b88ab9dc8017a024d8856ad2c836620a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _speed: 3
+  _powerupID: 0
+  _clip: {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}
 --- !u!1 &3679091581597656425
 GameObject:
   m_ObjectHideFlags: 0

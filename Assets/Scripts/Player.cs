@@ -194,9 +194,11 @@ public class Player : MonoBehaviour
     public void TripleShotActive()
     {
         _isTriProActive = false;
-        _isTripleShotActive = true;        
-        StartCoroutine(TripleShotPowerDownRoutine());
+        _isTripleShotActive = true;
         _playerAmmo = 25;
+        _uiManager.UpdateAmmo(_playerAmmo);
+        _uiManager._totalAmmoText.color = Color.white;
+        StartCoroutine(TripleShotPowerDownRoutine()); 
         _isThereAmmo = true;
     }
     
@@ -209,10 +211,12 @@ public class Player : MonoBehaviour
 
     public void TriProActive()
     {
+        _playerAmmo = 25;
+        _uiManager.UpdateAmmo(_playerAmmo);
+        _uiManager._totalAmmoText.color = Color.white;
         _isTripleShotActive = false;
         _isTriProActive = true;
         StartCoroutine(TriProPowerDownRoutine());
-        _playerAmmo = 25;
         _isThereAmmo = true;
     }
 
@@ -247,6 +251,7 @@ public class Player : MonoBehaviour
     {
         _playerAmmo = 25;
         _uiManager.UpdateAmmo(_playerAmmo);
+        _uiManager._totalAmmoText.color = Color.white;
         _isThereAmmo = true;
     }
     
@@ -305,6 +310,8 @@ public class Player : MonoBehaviour
     public void AmmoDepleted()
     {
         _playerAmmo = 0;
+        _uiManager.UpdateAmmo(_playerAmmo);
         _isThereAmmo = false;
+        _uiManager._totalAmmoText.color = Color.red;
     }
 }

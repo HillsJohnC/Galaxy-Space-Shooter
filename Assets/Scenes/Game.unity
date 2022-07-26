@@ -376,7 +376,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 308024771}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.0236, y: 1.0098, z: 0}
+  m_LocalPosition: {x: 0.01, y: 1.0098, z: 0}
   m_LocalScale: {x: 1.0722628, y: 1.0686313, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -487,7 +487,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 429255269}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.44, y: 0.31, z: 0}
+  m_LocalPosition: {x: 3.82, y: -1.27, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 1406323180}
@@ -1703,17 +1703,19 @@ MonoBehaviour:
   _enemyPrefab: {fileID: 6588467298655406965, guid: cb97d0fd6e35ef94288ba3b021db7b2d, type: 3}
   _enemyContainer: {fileID: 1548139379}
   _powerups:
-  - {fileID: 8586532499379342300, guid: 33984354251112f4c9a399e91b548d62, type: 3}
+  - {fileID: 4589639437510429105, guid: fb16e622e0ee68b458488642291a6578, type: 3}
   - {fileID: 3003298225320131923, guid: 0e21d80bcc53feb45967915f0f09597a, type: 3}
   - {fileID: 5345269986296652262, guid: d93351f518e419946b3a665acced1373, type: 3}
-  - {fileID: 4589639437510429105, guid: fb16e622e0ee68b458488642291a6578, type: 3}
   - {fileID: 4270110198815210612, guid: 1771bba40a0e97b4896264cea6d57c55, type: 3}
+  - {fileID: 8586532499379342300, guid: 33984354251112f4c9a399e91b548d62, type: 3}
   - {fileID: 3363759153572358534, guid: 66c47f6374504824eb2046c0030021e1, type: 3}
-  _rarePowerups:
-  - {fileID: 1569210097948309494, guid: bece73c1571e7174f94945fd06fcaf55, type: 3}
+  - {fileID: 1623188647756329010, guid: 9d4ae18ea30ddab4d821c770010ca923, type: 3}
   _numberOfEnemies: 10
   _enemiesSpawned: 0
   enemiesKilled: 0
+  powerupTable: fa000000b40000009600000087000000690000005f0000002d000000
+  powerupTotal: 0
+  randomPowerupNumber: 0
 --- !u!1 &1645834505
 GameObject:
   m_ObjectHideFlags: 0

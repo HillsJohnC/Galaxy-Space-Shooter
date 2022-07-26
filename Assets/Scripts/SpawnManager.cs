@@ -7,7 +7,6 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private GameObject _enemyPrefab;
     [SerializeField] private GameObject _enemyContainer;
     [SerializeField] private GameObject[] _powerups;
-    [SerializeField] private GameObject[] _rarePowerups;
     private bool _stopSpawning = false;
     private bool _isWaveInitiated = true;
     private int _waveCount = 1;
@@ -16,6 +15,19 @@ public class SpawnManager : MonoBehaviour
     public int enemiesKilled;
     private UIManager _uiManager;
     private Player _player;
+    public int[] powerupTable =
+    {
+        250,    // Ammo
+        180,    // Speed Boost
+        150,    // Shields
+        135,    // Health
+        105,    // Triple Shot
+        95,     // No Ammo
+        45      // Tri Pro (Triple Shot Pro)
+    };
+    public int powerupTotal;
+    public int randomPowerupNumber;
+    private bool _powerupSpawn;
 
     private void Start()
     {        
@@ -31,16 +43,27 @@ public class SpawnManager : MonoBehaviour
         {
             Debug.LogError("The UIManager is NULL!!");
         }
+
+        foreach (var item in powerupTable)
+        {
+            powerupTotal += item;
+        }
     }
 
 
     private void Update()
     {
         Wave();
+        RestartSpawnPowerupRoutine();
     }
 
     private void Wave()
     {
+        if (_enemiesSpawned == _numberOfEnemies)
+        {
+            StopCoroutine(SpawnEnemyRoutine());
+        }
+
         if (enemiesKilled >= _numberOfEnemies)
         {
             StopAllCoroutines();
@@ -64,7 +87,6 @@ public class SpawnManager : MonoBehaviour
         {
             StartCoroutine(SpawnEnemyRoutine());
             StartCoroutine(SpawnPowerupRoutine());
-            StartCoroutine(SpawnRarePowerupRoutine());
         }
     }
 
@@ -81,7 +103,7 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator SpawnEnemyRoutine()
     {
-        
+        yield return new WaitForSeconds(2.3f);
         while (_stopSpawning == false && _enemiesSpawned < _numberOfEnemies)
         {
             _enemiesSpawned++;
@@ -93,29 +115,40 @@ public class SpawnManager : MonoBehaviour
     }
 
     IEnumerator SpawnPowerupRoutine()
-    {
-        yield return new WaitForSeconds(4.0f);
+    {        
         while(_stopSpawning == false)
         {
-            Vector3 posToSpawn = new Vector3(Random.Range(-8.5f, 8.5f), 7, 0);
-            int randomPowerUp = Random.Range(0, 6);
-            Instantiate(_powerups[randomPowerUp], posToSpawn, Quaternion.identity);
+            yield return new WaitForSeconds(4.0f);
+
+            randomPowerupNumber = Random.Range(0, powerupTotal);
+
+            for (int i = 0; i < powerupTable.Length; i++)
+            {
+                if (randomPowerupNumber <= powerupTable[i])
+                {
+                    Vector3 posToSpawn = new Vector3(Random.Range(-8.5f, 8.5f), 7, 0);                    
+                    Instantiate(_powerups[i], posToSpawn, Quaternion.identity);
+                    _powerupSpawn = true;
+                    yield break;
+                }
+                else
+                {
+                    randomPowerupNumber -= powerupTable[i];
+                }
+            }
             yield return new WaitForSeconds(Random.Range(4, 8));
         }
     }
 
-    IEnumerator SpawnRarePowerupRoutine()
+    private void RestartSpawnPowerupRoutine()
     {
-        yield return new WaitForSeconds(20.0f);
-        while (_stopSpawning == false)
+        if (_powerupSpawn == true)
         {
-            Vector3 posToSpawn = new Vector3(Random.Range(-8.5f, 8.5f), 7, 0);
-            int rareRandomPowerUp = Random.Range(0, 1);
-            Instantiate(_rarePowerups[rareRandomPowerUp], posToSpawn, Quaternion.identity);
-            yield return new WaitForSeconds(Random.Range(15, 20));
+            _powerupSpawn = false;
+            StartCoroutine(SpawnPowerupRoutine());
         }
     }
-
+    
     public void OnPlayerDeath()
     {
         _stopSpawning = true;

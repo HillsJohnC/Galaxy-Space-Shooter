@@ -49,6 +49,9 @@ public class Powerup : MonoBehaviour
                     case 5:
                         player.AmmoDepleted();
                         break;
+                    case 6:
+                        player.TriProActive();
+                        break;
                     default:
                         Debug.Log("Default Value");
                         break;

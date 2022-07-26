@@ -18,7 +18,7 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _movePattern = Random.Range(0, 2);
+        _movePattern = Random.Range(0, 3);
         _player = GameObject.Find("Player").GetComponent<Player>();
         _audioSource = GetComponent<AudioSource>();
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
@@ -76,6 +76,9 @@ public class Enemy : MonoBehaviour
                 break;
             case 1:
                 transform.Translate(new Vector3(Mathf.Cos(Time.time), Mathf.Sin(Time.time) - .1f, 0) * _speed * Time.deltaTime);
+                break;
+            case 2:
+                transform.Translate(Vector3.down * _speed * Time.deltaTime);
                 break;
             default:
                 transform.Translate(Vector3.down * _speed * Time.deltaTime);
