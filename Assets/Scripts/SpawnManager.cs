@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-    [SerializeField] private GameObject _enemyPrefab;
+    [SerializeField] private GameObject[] _enemyPrefab;
     [SerializeField] private GameObject _enemyContainer;
     [SerializeField] private GameObject[] _powerups;
     private bool _stopSpawning = false;
@@ -15,19 +15,28 @@ public class SpawnManager : MonoBehaviour
     public int enemiesKilled;
     private UIManager _uiManager;
     private Player _player;
+    public int[] enemyTable =
+    {
+        950,        // Enemy 1
+        50         // Enemy 2
+    };
+    public int enemyTotal;
+    public int randomEnemyNumber;
+    private bool _enemySpawnRestart;
+
     public int[] powerupTable =
     {
-        250,    // Ammo
-        180,    // Speed Boost
-        150,    // Shields
-        135,    // Health
-        105,    // Triple Shot
-        95,     // No Ammo
-        45      // Tri Pro (Triple Shot Pro)
+        250,        // Ammo
+        180,        // Speed Boost
+        150,        // Shields
+        135,        // Health
+        105,        // Triple Shot
+        95,         // No Ammo
+        45          // Tri Pro (Triple Shot Pro)
     };
     public int powerupTotal;
     public int randomPowerupNumber;
-    private bool _powerupSpawn;
+    private bool _powerupSpawnRestart;
 
     private void Start()
     {        
@@ -48,6 +57,11 @@ public class SpawnManager : MonoBehaviour
         {
             powerupTotal += item;
         }
+
+        foreach (var item in enemyTable)
+        {
+            enemyTotal += item;
+        }
     }
 
 
@@ -55,6 +69,7 @@ public class SpawnManager : MonoBehaviour
     {
         Wave();
         RestartSpawnPowerupRoutine();
+        RestartSpawnEnemyRoutine();
     }
 
     private void Wave()
@@ -102,16 +117,41 @@ public class SpawnManager : MonoBehaviour
     }
 
     IEnumerator SpawnEnemyRoutine()
-    {
-        yield return new WaitForSeconds(2.3f);
+    {        
         while (_stopSpawning == false && _enemiesSpawned < _numberOfEnemies)
         {
-            _enemiesSpawned++;
-            Vector3 posToSpawn = new Vector3(Random.Range(-8.5f, 8.5f), 7, 0);
-            GameObject newEnemy = Instantiate(_enemyPrefab, posToSpawn, Quaternion.identity);
-            newEnemy.transform.parent = _enemyContainer.transform;
+            yield return new WaitForSeconds(2.3f);
+            randomEnemyNumber = Random.Range(0, enemyTotal);
+
+
+
+            for (int i = 0; i < enemyTable.Length; i++)
+            {
+                if (randomEnemyNumber <= enemyTable[i])
+                {
+                    _enemiesSpawned++;
+                    Vector3 posToSpawn = new Vector3(Random.Range(-8.5f, 8.5f), 7, 0);
+                    GameObject newEnemy = Instantiate(_enemyPrefab[i], posToSpawn, Quaternion.identity);
+                    newEnemy.transform.parent = _enemyContainer.transform;
+                    _enemySpawnRestart = true;
+                    yield break;
+                }
+                else
+                {
+                    randomEnemyNumber -= enemyTable[i];
+                }
+            }
             yield return new WaitForSeconds(2f);
         }
+    }
+
+    private void RestartSpawnEnemyRoutine()
+    {
+        if (_enemySpawnRestart == true)
+        {
+            _enemySpawnRestart = false;
+            StartCoroutine(SpawnEnemyRoutine());
+        }            
     }
 
     IEnumerator SpawnPowerupRoutine()
@@ -128,7 +168,7 @@ public class SpawnManager : MonoBehaviour
                 {
                     Vector3 posToSpawn = new Vector3(Random.Range(-8.5f, 8.5f), 7, 0);                    
                     Instantiate(_powerups[i], posToSpawn, Quaternion.identity);
-                    _powerupSpawn = true;
+                    _powerupSpawnRestart = true;
                     yield break;
                 }
                 else
@@ -142,9 +182,9 @@ public class SpawnManager : MonoBehaviour
 
     private void RestartSpawnPowerupRoutine()
     {
-        if (_powerupSpawn == true)
+        if (_powerupSpawnRestart == true)
         {
-            _powerupSpawn = false;
+            _powerupSpawnRestart = false;
             StartCoroutine(SpawnPowerupRoutine());
         }
     }

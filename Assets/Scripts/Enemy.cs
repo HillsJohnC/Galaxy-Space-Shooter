@@ -12,13 +12,14 @@ public class Enemy : MonoBehaviour
     private AudioSource _audioSource;
     private float _fireRate = 3.0f;
     private float _canFire = -1;
-    public int _movePattern;
+    [SerializeField] private int _movePattern;
     private SpawnManager _spawnManager;
     
     // Start is called before the first frame update
     void Start()
     {
-        _movePattern = Random.Range(0, 3);
+        
+        _movePattern = Random.Range(1, 3);
         _player = GameObject.Find("Player").GetComponent<Player>();
         _audioSource = GetComponent<AudioSource>();
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
@@ -72,7 +73,7 @@ public class Enemy : MonoBehaviour
         switch (_movePattern)
         {
             case 0:
-                transform.Translate(new Vector3(Mathf.Cos(Time.time), -1, 0) * _speed * Time.deltaTime);
+                transform.Translate(new Vector3(Mathf.Cos(Time.time), 1, 0) * _speed * Time.deltaTime);
                 break;
             case 1:
                 transform.Translate(new Vector3(Mathf.Cos(Time.time), Mathf.Sin(Time.time) - .1f, 0) * _speed * Time.deltaTime);
@@ -84,12 +85,12 @@ public class Enemy : MonoBehaviour
                 transform.Translate(Vector3.down * _speed * Time.deltaTime);
                 break;
         }
-        
 
-        if (_enemyCollider.enabled == false && transform.position.y < -5f)
-        {
-            Destroy(this.gameObject);
-        }
+
+        //if (_enemyCollider.enabled == false && transform.position.y < -5f)
+        //{
+        //    Destroy(this.gameObject);
+        //}
 
         if (transform.position.y < -5f)
         {
@@ -102,8 +103,8 @@ public class Enemy : MonoBehaviour
     {
         if (other.tag == "Player" && _player != null)
         {
-            _player.Damage();
             EnemyDestroyed();
+            _player.Damage();            
         }      
 
         if (other.tag == "Laser" && _player != null)
