@@ -7,11 +7,11 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private GameObject[] _enemyPrefab;
     [SerializeField] private GameObject _enemyContainer;
     [SerializeField] private GameObject[] _powerups;
+    [SerializeField] private int _numberOfEnemies = 10;
+    [SerializeField] private int _enemiesSpawned = 0;
     private bool _stopSpawning = false;
     private bool _isWaveInitiated = true;
     private int _waveCount = 1;
-    [SerializeField] private int _numberOfEnemies = 10;
-    [SerializeField] private int _enemiesSpawned = 0;
     public int enemiesKilled;
     private UIManager _uiManager;
     private Player _player;
@@ -191,6 +191,6 @@ public class SpawnManager : MonoBehaviour
     
     public void OnPlayerDeath()
     {
-        _stopSpawning = true;
+        StopAllCoroutines();
     }
 }

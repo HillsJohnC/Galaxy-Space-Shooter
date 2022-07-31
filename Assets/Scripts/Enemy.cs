@@ -6,23 +6,26 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] private float _speed = 3.0f;
     [SerializeField] private GameObject _laserPrefab;
+    [SerializeField] private GameObject _enemyShieldVisualizer;
+    [SerializeField] private int _movePattern;
     private Player _player;
     private Animator _anim;
     private Collider2D _enemyCollider;
     private AudioSource _audioSource;
     private float _fireRate = 3.0f;
     private float _canFire = -1;
-    [SerializeField] private int _movePattern;
     private SpawnManager _spawnManager;
+    private int _randomEnemyShield;
+    private bool _isEnemyShieldActive = false;
     
     // Start is called before the first frame update
     void Start()
     {
-        
+        EnemyShield();
         _movePattern = Random.Range(1, 3);
         _player = GameObject.Find("Player").GetComponent<Player>();
         _audioSource = GetComponent<AudioSource>();
-        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();       
 
         if (_spawnManager == null)
         {
@@ -65,6 +68,22 @@ public class Enemy : MonoBehaviour
             {
                 lasers[i].AssignEnemyLaser();
             }
+        }
+    }
+
+    private void EnemyShield()
+    {
+        _randomEnemyShield = Random.Range(0, 7);
+
+        if (_randomEnemyShield > 3)
+        {
+            _isEnemyShieldActive = true;
+            _enemyShieldVisualizer.SetActive(true);
+        }
+        else
+        {
+            _isEnemyShieldActive = false;
+            _enemyShieldVisualizer.SetActive(false);
         }
     }
 
@@ -117,10 +136,18 @@ public class Enemy : MonoBehaviour
 
     private void EnemyDestroyed()
     {
-        _enemyCollider.enabled = false;
-        _anim.SetTrigger("OnEnemyDeath");
-        _audioSource.Play();
-        _spawnManager.enemiesKilled++;
-        Destroy(this.gameObject, 2.8f);
+        if (_isEnemyShieldActive == true)
+        {
+            _isEnemyShieldActive = false;
+            _enemyShieldVisualizer.SetActive(false);
+        }
+        else
+        {
+            _enemyCollider.enabled = false;
+            _anim.SetTrigger("OnEnemyDeath");
+            _audioSource.Play();
+            _spawnManager.enemiesKilled++;
+            Destroy(this.gameObject, 2.8f);
+        }
     }
 }
