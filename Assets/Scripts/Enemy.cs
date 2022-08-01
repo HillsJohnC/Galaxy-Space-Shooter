@@ -8,6 +8,9 @@ public class Enemy : MonoBehaviour
     [SerializeField] private GameObject _laserPrefab;
     [SerializeField] private GameObject _enemyShieldVisualizer;
     [SerializeField] private int _movePattern;
+    [SerializeField] private float _enemyAgroDistance = 3.2f;
+    [SerializeField] private float _enemyAgroSpeed = 2f;
+    private SpriteRenderer _spriteRenderer;
     private Player _player;
     private Animator _anim;
     private Collider2D _enemyCollider;
@@ -25,7 +28,8 @@ public class Enemy : MonoBehaviour
         _movePattern = Random.Range(1, 3);
         _player = GameObject.Find("Player").GetComponent<Player>();
         _audioSource = GetComponent<AudioSource>();
-        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();       
+        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
 
         if (_spawnManager == null)
         {
@@ -75,7 +79,7 @@ public class Enemy : MonoBehaviour
     {
         _randomEnemyShield = Random.Range(0, 7);
 
-        if (_randomEnemyShield > 3)
+        if (_randomEnemyShield > 5)
         {
             _isEnemyShieldActive = true;
             _enemyShieldVisualizer.SetActive(true);
@@ -105,17 +109,40 @@ public class Enemy : MonoBehaviour
                 break;
         }
 
-
-        //if (_enemyCollider.enabled == false && transform.position.y < -5f)
-        //{
-        //    Destroy(this.gameObject);
-        //}
-
-        if (transform.position.y < -5f)
+        if (_player != null)
         {
-            float randomX = Random.Range(-8f, 8f);
-            transform.position = new Vector3(randomX, 7, 0);
+            if (Vector3.Distance(transform.position, _player.transform.position) <= _enemyAgroDistance)
+            {
+                if (transform.position.y > _player.transform.position.y)
+                {
+                    StartCoroutine(AgroColor());
+                    transform.position = Vector2.MoveTowards(transform.position, _player.transform.position, _enemyAgroSpeed * Time.deltaTime);
+                }
+                else
+                {
+                    StopCoroutine(AgroColor());
+                    _spriteRenderer.color = Color.white;
+                }
+            }
+             
+            if (_enemyCollider.enabled == false && transform.position.y < -5f)
+            {
+                Destroy(this.gameObject);
+            }
+            if (transform.position.y < -5f)
+            {
+                float randomX = Random.Range(-8f, 8f);
+                transform.position = new Vector3(randomX, 7, 0);
+            }
         }
+    }
+
+    IEnumerator AgroColor()
+    {
+        _spriteRenderer.color = Color.red;
+        yield return new WaitForSeconds(1.5f);
+        _spriteRenderer.color = Color.white;
+        yield return new WaitForSeconds(1.5f);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
