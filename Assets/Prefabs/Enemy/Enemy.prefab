@@ -52,7 +52,11 @@ MonoBehaviour:
   _speed: 3
   _laserPrefab: {fileID: 8189026899448172403, guid: 9c31d763c08a15e489aae94614689bf4, type: 3}
   _enemyShieldVisualizer: {fileID: 7213749074385802303}
-  _movePattern: 0
+  _movePattern: 3
+  _enemyAgroDistance: 3.2
+  _enemyAgroSpeed: 2
+  _backFire: {fileID: 2157918804738963471, guid: c504384be5f80014da13f972e5fe6431, type: 3}
+  _backFireDistance: 6
 --- !u!212 &1061291535968663561
 SpriteRenderer:
   m_ObjectHideFlags: 0

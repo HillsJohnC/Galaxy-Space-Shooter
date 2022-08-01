@@ -6,11 +6,12 @@ public class Laser : MonoBehaviour
 {
     [SerializeField] private float _speed = 8.0f;
     [SerializeField] private bool _isEnemyLaser = false;
+    private bool _isBackFire = false;
 
     // Update is called once per frame
     void Update()
     {
-        if (_isEnemyLaser == false)
+        if (_isEnemyLaser == false || _isBackFire == true)
         {
             MoveUp();
         }
@@ -55,9 +56,14 @@ public class Laser : MonoBehaviour
         _isEnemyLaser = true;
     }
 
+    public void AssignBackFire()
+    {
+        _isBackFire = true;
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Player" && _isEnemyLaser == true)
+        if (other.CompareTag("Player") && (_isEnemyLaser == true || _isBackFire == true))
         {
             Player player = other.GetComponent<Player>();
 

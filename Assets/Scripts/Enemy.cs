@@ -10,6 +10,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] private int _movePattern;
     [SerializeField] private float _enemyAgroDistance = 3.2f;
     [SerializeField] private float _enemyAgroSpeed = 2f;
+    [SerializeField] private GameObject _backFire;
+    [SerializeField] private float _backFireDistance = 6f;
     private SpriteRenderer _spriteRenderer;
     private Player _player;
     private Animator _anim;
@@ -71,6 +73,16 @@ public class Enemy : MonoBehaviour
             for (int i = 0; i < lasers.Length; i++)
             {
                 lasers[i].AssignEnemyLaser();
+            }
+
+            if (Vector3.Distance(transform.position, _player.transform.position) <= _backFireDistance)
+            {
+                if (transform.position.y < _player.transform.position.y)
+                {
+                    GameObject backFire = Instantiate(_backFire, transform.position, Quaternion.identity);
+                    Laser laser = backFire.GetComponent<Laser>();
+                    laser.AssignBackFire();
+                }
             }
         }
     }
