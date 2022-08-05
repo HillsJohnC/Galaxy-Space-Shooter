@@ -5,27 +5,28 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {    
     [SerializeField] private float _speed = 3.5f;
-    private float _speedMultiplier = 2;
-    private float _thrusterValue = 1f;
     [SerializeField] public CameraShake cameraShake;
     [SerializeField] private GameObject _laserPrefab;
     [SerializeField] private GameObject _tripleShotPrefab;
     [SerializeField] private GameObject _triProPrefab;
     [SerializeField] private float _fireRate = 0.25f;
-    private float _canFire = -1f;    
-    private int _playerAmmo = 25;
     [SerializeField] private bool _isThereAmmo = true;
     [SerializeField] private int _lives = 3;
-    private SpawnManager _spawnManager;
-    private bool _isTripleShotActive = false;
-    private bool _isShieldsActive = false;
-    private bool _isTriProActive = false;    
     [SerializeField] private int _shieldLives;
     [SerializeField] private GameObject _shieldVisualizer;
     [SerializeField] private GameObject _leftEngine, _rightEngine;        
     [SerializeField] private int _score;
-    private UIManager _uiManager;
-    [SerializeField] private AudioClip _laserSoundClip;    
+    [SerializeField] private AudioClip _laserSoundClip; 
+    private float _speedMultiplier = 2;
+    private float _thrusterValue = 1f;    
+    private float _canFire = -1f;    
+    private int _playerAmmo = 25;
+    private SpawnManager _spawnManager;
+    private bool _isTripleShotActive = false;
+    private bool _isShieldsActive = false;
+    private bool _isTriProActive = false;
+    public bool _isPowerupAttractActive = false;    
+    private UIManager _uiManager;       
     private AudioSource _audioSource;
     
     SpriteRenderer shieldSprite;
@@ -96,10 +97,20 @@ public class Player : MonoBehaviour
         {
             transform.Translate(direction * _speed * Time.deltaTime);
             if (!Input.GetKey(KeyCode.LeftShift))
+            {
                 ThrusterRegen();
+            }
         }
 
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, -9.5f, 9.5f), Mathf.Clamp(transform.position.y, -3.15f, 2f), 0);
+        if (Input.GetKey(KeyCode.C))
+        {
+            _isPowerupAttractActive = true;
+        }
+        else
+        {
+            _isPowerupAttractActive = false;
+        }
     }
 
     void ThrusterTimer()

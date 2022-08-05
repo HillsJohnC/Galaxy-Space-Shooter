@@ -7,11 +7,22 @@ public class Powerup : MonoBehaviour
     [SerializeField] private float _speed = 3.0f;    
     [SerializeField] private int _powerupID;    
     [SerializeField] private AudioClip _clip;
+    private float _powerupAttractSpeed = 6f;
+    private Player _player;
+
+    private void Start()
+    {
+        _player = GameObject.Find("Player").GetComponent <Player>();
+    }
 
     // Update is called once per frame
     void Update()
     {
-       transform.Translate(Vector3.down * _speed * Time.deltaTime);
+       transform.Translate(_speed * Time.deltaTime * Vector3.down);
+        if (_player._isPowerupAttractActive == true)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, _player.transform.position, _powerupAttractSpeed * Time.deltaTime);
+        }
 
         if (transform.position.y < -4.5f)
         {

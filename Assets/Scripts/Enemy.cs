@@ -61,30 +61,12 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CalculateMovement();
-
-        if (Time.time > _canFire)
+        if (_player == null)
         {
-            _fireRate = Random.Range(3f, 7f);
-            _canFire = Time.time + _fireRate;
-            GameObject enemyLaser = Instantiate(_laserPrefab, transform.position, Quaternion.identity);       
-            Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
-          
-            for (int i = 0; i < lasers.Length; i++)
-            {
-                lasers[i].AssignEnemyLaser();
-            }
-
-            if (Vector3.Distance(transform.position, _player.transform.position) <= _backFireDistance)
-            {
-                if (transform.position.y < _player.transform.position.y)
-                {
-                    GameObject backFire = Instantiate(_backFire, transform.position, Quaternion.identity);
-                    Laser laser = backFire.GetComponent<Laser>();
-                    laser.AssignBackFire();
-                }
-            }
+            Destroy(this.gameObject);
         }
+        CalculateMovement();
+        CanFire();
     }
 
     private void EnemyShield()
@@ -100,6 +82,32 @@ public class Enemy : MonoBehaviour
         {
             _isEnemyShieldActive = false;
             _enemyShieldVisualizer.SetActive(false);
+        }
+    }
+
+    private void CanFire()
+    {
+        if (Time.time > _canFire)
+        {
+            _fireRate = Random.Range(3f, 7f);
+            _canFire = Time.time + _fireRate;
+            GameObject enemyLaser = Instantiate(_laserPrefab, transform.position, Quaternion.identity);
+            Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
+
+            for (int i = 0; i < lasers.Length; i++)
+            {
+                lasers[i].AssignEnemyLaser();
+            }
+
+            if (Vector3.Distance(transform.position, _player.transform.position) <= _backFireDistance)
+            {
+                if (transform.position.y < _player.transform.position.y)
+                {
+                    GameObject backFire = Instantiate(_backFire, transform.position, Quaternion.identity);
+                    Laser laser = backFire.GetComponent<Laser>();
+                    laser.AssignBackFire();
+                }
+            }
         }
     }
 
