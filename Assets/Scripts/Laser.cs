@@ -72,5 +72,10 @@ public class Laser : MonoBehaviour
                 player.Damage();
             }
         }
+        else if (other.tag == "Powerup" && _isEnemyLaser)
+        {
+            other.GetComponent<Powerup>().PowerupHit();
+            Destroy(gameObject);
+        }
     }
 }

@@ -111,6 +111,13 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    public void ShootPU()
+    {
+        GameObject enemyLaser = Instantiate(_laserPrefab, transform.position, Quaternion.identity);
+        Laser laser = enemyLaser.GetComponentInChildren<Laser>();
+        laser.AssignEnemyLaser();
+    }
+
     public void CalculateMovement()
     {
         switch (_movePattern)

@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3849364314732850790}
+  - component: {fileID: 444594312709910587}
   - component: {fileID: 7420407807444608911}
   - component: {fileID: 1424747975375335676}
-  - component: {fileID: 444594312709910587}
   - component: {fileID: -4624097860236608913}
   m_Layer: 0
   m_Name: Explosion
@@ -34,6 +34,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &444594312709910587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2080257832804287625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 436d7818dbb21a946a957e99e116c29a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &7420407807444608911
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -104,18 +116,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &444594312709910587
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2080257832804287625}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 436d7818dbb21a946a957e99e116c29a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!82 &-4624097860236608913
 AudioSource:
   m_ObjectHideFlags: 0

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Powerup : MonoBehaviour
 {
-    [SerializeField] private float _speed = 3.0f;    
+    [SerializeField] private float _speed = 2.5f;    
     [SerializeField] private int _powerupID;    
     [SerializeField] private AudioClip _clip;
     private float _powerupAttractSpeed = 6f;
@@ -71,5 +71,10 @@ public class Powerup : MonoBehaviour
             
             Destroy(this.gameObject);
         }
+    }
+
+    public void PowerupHit()
+    {
+        Destroy(this.gameObject);
     }
 }
