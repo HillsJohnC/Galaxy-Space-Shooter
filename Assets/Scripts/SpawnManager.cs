@@ -15,11 +15,13 @@ public class SpawnManager : MonoBehaviour
     public int enemiesKilled;
     private UIManager _uiManager;
     private Player _player;
+
     public int[] enemyTable =
     {
-        950,        // Enemy 1
-        50         // Enemy 2
+        980,        // Enemy 1
+        20         // Enemy 2
     };
+
     public int enemyTotal;
     public int randomEnemyNumber;
     private bool _enemySpawnRestart;
@@ -34,6 +36,7 @@ public class SpawnManager : MonoBehaviour
         95,         // No Ammo
         45          // Tri Pro (Triple Shot Pro)
     };
+
     public int powerupTotal;
     public int randomPowerupNumber;
     private bool _powerupSpawnRestart;
@@ -141,7 +144,7 @@ public class SpawnManager : MonoBehaviour
                     randomEnemyNumber -= enemyTable[i];
                 }
             }
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(4.0f);
         }
     }
 

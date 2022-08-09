@@ -21,7 +21,7 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _totalAmmoText.text = "Ammo: " + 25 + " / 25";
+        _totalAmmoText.text = "Ammo: " + 25 + " / 75";
         _player = GameObject.Find("Player").GetComponent<Player>();
         _scoreText.text = "Score: " + 0;
         _gameOverText.gameObject.SetActive(false);
@@ -41,7 +41,7 @@ public class UIManager : MonoBehaviour
 
     public void UpdateAmmo(int playerAmmo)
     {
-        _totalAmmoText.text = "Ammo: " + playerAmmo + " / 25";
+        _totalAmmoText.text = "Ammo: " + playerAmmo + " / 75";
     }
 
     public void UpdateScore(int playerScore)

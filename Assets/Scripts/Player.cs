@@ -16,7 +16,8 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject _shieldVisualizer;
     [SerializeField] private GameObject _leftEngine, _rightEngine;        
     [SerializeField] private int _score;
-    [SerializeField] private AudioClip _laserSoundClip; 
+    [SerializeField] private AudioClip _laserSoundClip;
+    private int _maxAmmo = 75;
     private float _speedMultiplier = 2;
     private float _thrusterValue = 1f;    
     private float _canFire = -1f;    
@@ -206,9 +207,8 @@ public class Player : MonoBehaviour
     {
         _isTriProActive = false;
         _isTripleShotActive = true;
-        _playerAmmo = 25;
-        _uiManager.UpdateAmmo(_playerAmmo);
-        _uiManager._totalAmmoText.color = Color.white;
+        _playerAmmo += 25;
+        MaxAmmo();
         StartCoroutine(TripleShotPowerDownRoutine()); 
         _isThereAmmo = true;
     }
@@ -222,11 +222,10 @@ public class Player : MonoBehaviour
 
     public void TriProActive()
     {
-        _playerAmmo = 25;
-        _uiManager.UpdateAmmo(_playerAmmo);
-        _uiManager._totalAmmoText.color = Color.white;
+        _playerAmmo += 25;
         _isTripleShotActive = false;
         _isTriProActive = true;
+        MaxAmmo();
         StartCoroutine(TriProPowerDownRoutine());
         _isThereAmmo = true;
     }
@@ -260,10 +259,19 @@ public class Player : MonoBehaviour
 
     public void AmmoCollected()
     {
-        _playerAmmo = 25;
+        _playerAmmo += 25;
+        _isThereAmmo = true;
+        MaxAmmo();
+    }
+
+    public void MaxAmmo()
+    {
+        if (_playerAmmo > _maxAmmo)
+        {
+            _playerAmmo = _maxAmmo;
+        }
         _uiManager.UpdateAmmo(_playerAmmo);
         _uiManager._totalAmmoText.color = Color.white;
-        _isThereAmmo = true;
     }
     
     public void AddScore(int points)

@@ -5,13 +5,16 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private float _speed = 3.0f;
-    [SerializeField] private GameObject _laserPrefab;
+    [SerializeField] private GameObject _enemyLaserPrefab;    
     [SerializeField] private GameObject _enemyShieldVisualizer;
     [SerializeField] private int _movePattern;
     [SerializeField] private float _enemyAgroDistance = 3.2f;
     [SerializeField] private float _enemyAgroSpeed = 2f;
     [SerializeField] private GameObject _backFire;
     [SerializeField] private float _backFireDistance = 6f;
+    [SerializeField] private float _enemyLaserCastDistance = 8f;
+    [SerializeField] private float _enemyLaserCastRadius = 1f;
+    [SerializeField] private float _avoidAmount = 2f;
     private SpriteRenderer _spriteRenderer;
     private Player _player;
     private Animator _anim;
@@ -91,7 +94,7 @@ public class Enemy : MonoBehaviour
         {
             _fireRate = Random.Range(3f, 7f);
             _canFire = Time.time + _fireRate;
-            GameObject enemyLaser = Instantiate(_laserPrefab, transform.position, Quaternion.identity);
+            GameObject enemyLaser = Instantiate(_enemyLaserPrefab, transform.position, Quaternion.identity);
             Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
 
             for (int i = 0; i < lasers.Length; i++)
@@ -113,7 +116,7 @@ public class Enemy : MonoBehaviour
 
     public void ShootPU()
     {
-        GameObject enemyLaser = Instantiate(_laserPrefab, transform.position, Quaternion.identity);
+        GameObject enemyLaser = Instantiate(_enemyLaserPrefab, transform.position, Quaternion.identity);
         Laser laser = enemyLaser.GetComponentInChildren<Laser>();
         laser.AssignEnemyLaser();
     }
@@ -123,21 +126,45 @@ public class Enemy : MonoBehaviour
         switch (_movePattern)
         {
             case 0:
-                transform.Translate(new Vector3(Mathf.Cos(Time.time), 1, 0) * _speed * Time.deltaTime);
+                transform.Translate(_speed * Time.deltaTime * new Vector3(Mathf.Cos(Time.time), 1, 0));
                 break;
             case 1:
-                transform.Translate(new Vector3(Mathf.Cos(Time.time), Mathf.Sin(Time.time) - .1f, 0) * _speed * Time.deltaTime);
+                transform.Translate(_speed * Time.deltaTime * new Vector3(Mathf.Cos(Time.time), Mathf.Sin(Time.time) - .1f, 0));
                 break;
             case 2:
-                transform.Translate(Vector3.down * _speed * Time.deltaTime);
+                transform.Translate(_speed * Time.deltaTime * Vector3.down);
                 break;
             default:
-                transform.Translate(Vector3.down * _speed * Time.deltaTime);
+                transform.Translate(_speed * Time.deltaTime * Vector3.down);
                 break;
         }
 
         if (_player != null)
         {
+            RaycastHit2D hit = Physics2D.CircleCast(transform.position, _enemyLaserCastRadius, Vector2.down, _enemyLaserCastDistance, LayerMask.GetMask("Laser"));
+
+
+            if (hit.collider != null && this.CompareTag("Enemy2"))
+            {
+                if (hit.collider.CompareTag("Laser") && _avoidAmount > 0f)
+                {
+                    if (transform.position.x <= hit.transform.position.x)
+                    {
+                        transform.position = new Vector2(transform.position.x - 1.5f, transform.position.y);
+                    }
+                    else
+                    {
+                        transform.position = new Vector2(transform.position.x + 1.5f, transform.position.y);
+                    }
+
+                    _avoidAmount -= 1f;
+                }
+                else if (_avoidAmount <= 0)
+                {
+                    return;
+                }
+            }
+
             if (Vector3.Distance(transform.position, _player.transform.position) <= _enemyAgroDistance)
             {
                 if (transform.position.y > _player.transform.position.y)
@@ -150,8 +177,10 @@ public class Enemy : MonoBehaviour
                     StopCoroutine(AgroColor());
                     _spriteRenderer.color = Color.white;
                 }
+                
+
             }
-             
+
             if (_enemyCollider.enabled == false && transform.position.y < -5f)
             {
                 Destroy(this.gameObject);
@@ -197,6 +226,7 @@ public class Enemy : MonoBehaviour
         }
         else
         {
+            _canFire = 1;
             _enemyCollider.enabled = false;
             _anim.SetTrigger("OnEnemyDeath");
             _audioSource.Play();
