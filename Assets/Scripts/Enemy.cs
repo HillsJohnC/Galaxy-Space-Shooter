@@ -215,6 +215,13 @@ public class Enemy : MonoBehaviour
             _player.AddScore(10);
             EnemyDestroyed();
         }
+
+        if (other.CompareTag("HeatSeeker"))
+        {
+            Destroy(other.gameObject);
+            _player.AddScore(50);
+            EnemyDestroyed();
+        }
     }
 
     private void EnemyDestroyed()

@@ -34,7 +34,8 @@ public class SpawnManager : MonoBehaviour
         135,        // Health
         105,        // Triple Shot
         95,         // No Ammo
-        45          // Tri Pro (Triple Shot Pro)
+        45,         // Tri Pro (Triple Shot Pro)
+        15          // Heat Seeking Missle
     };
 
     public int powerupTotal;

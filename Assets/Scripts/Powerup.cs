@@ -19,7 +19,7 @@ public class Powerup : MonoBehaviour
     void Update()
     {
        transform.Translate(_speed * Time.deltaTime * Vector3.down);
-        if (_player._isPowerupAttractActive == true)
+        if (_player.isPowerupAttractActive == true)
         {
             transform.position = Vector2.MoveTowards(transform.position, _player.transform.position, _powerupAttractSpeed * Time.deltaTime);
         }
@@ -62,6 +62,9 @@ public class Powerup : MonoBehaviour
                         break;
                     case 6:
                         player.TriProActive();
+                        break;
+                    case 7:
+                        player.HeatSeekerCollected();
                         break;
                     default:
                         Debug.Log("Default Value");

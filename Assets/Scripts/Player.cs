@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
-{    
+{
     [SerializeField] private float _speed = 3.5f;
     [SerializeField] public CameraShake cameraShake;
     [SerializeField] private GameObject _laserPrefab;
     [SerializeField] private GameObject _tripleShotPrefab;
     [SerializeField] private GameObject _triProPrefab;
+    [SerializeField] private GameObject _heatSeeker;
     [SerializeField] private float _fireRate = 0.25f;
     [SerializeField] private bool _isThereAmmo = true;
     [SerializeField] private int _lives = 3;
@@ -26,7 +27,8 @@ public class Player : MonoBehaviour
     private bool _isTripleShotActive = false;
     private bool _isShieldsActive = false;
     private bool _isTriProActive = false;
-    public bool _isPowerupAttractActive = false;    
+    public bool isPowerupAttractActive = false;
+    private bool _isHeatSeekerActive = false;
     private UIManager _uiManager;       
     private AudioSource _audioSource;
     
@@ -76,7 +78,7 @@ public class Player : MonoBehaviour
         {
             if (_isThereAmmo == true)
             {
-                FireLaser();
+                FireWeapon();
             }
         }
     }
@@ -106,11 +108,11 @@ public class Player : MonoBehaviour
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, -9.5f, 9.5f), Mathf.Clamp(transform.position.y, -3.15f, 2f), 0);
         if (Input.GetKey(KeyCode.C))
         {
-            _isPowerupAttractActive = true;
+            isPowerupAttractActive = true;
         }
         else
         {
-            _isPowerupAttractActive = false;
+            isPowerupAttractActive = false;
         }
     }
 
@@ -132,7 +134,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    void FireLaser()
+    void FireWeapon()
            
     {
         _canFire = Time.time + _fireRate;
@@ -146,6 +148,12 @@ public class Player : MonoBehaviour
         else if (_isTriProActive == true)
         {
             Instantiate(_triProPrefab, transform.position, Quaternion.identity);
+            _playerAmmo--;
+        }
+
+        else if (_isHeatSeekerActive == true)
+        {
+            Instantiate(_heatSeeker, transform.position + new Vector3(0, 2.84f, 0), Quaternion.identity);
             _playerAmmo--;
         }
 
@@ -205,9 +213,10 @@ public class Player : MonoBehaviour
 
     public void TripleShotActive()
     {
+        _playerAmmo += 6;
         _isTriProActive = false;
-        _isTripleShotActive = true;
-        _playerAmmo += 25;
+        _isHeatSeekerActive = false;
+        _isTripleShotActive = true;        
         MaxAmmo();
         StartCoroutine(TripleShotPowerDownRoutine()); 
         _isThereAmmo = true;
@@ -222,8 +231,9 @@ public class Player : MonoBehaviour
 
     public void TriProActive()
     {
-        _playerAmmo += 25;
+        _playerAmmo += 6;
         _isTripleShotActive = false;
+        _isHeatSeekerActive = false;
         _isTriProActive = true;
         MaxAmmo();
         StartCoroutine(TriProPowerDownRoutine());
@@ -234,6 +244,23 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(5.0f);
         _isTriProActive = false;
+    }
+
+    public void HeatSeekerCollected()
+    {
+        _playerAmmo += 6;
+        _isTriProActive = false;
+        _isTripleShotActive = false;
+        _isHeatSeekerActive = true;
+        MaxAmmo();
+        StartCoroutine(HeatSeekerPowerDownRoutine());
+        _isThereAmmo = true;
+    }
+
+    IEnumerator HeatSeekerPowerDownRoutine()
+    {
+        yield return new WaitForSeconds(8.0f);
+        _isHeatSeekerActive = false;
     }
 
     public void SpeedBoostActive()
