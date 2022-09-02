@@ -191,13 +191,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 3
   _enemyLaserPrefab: {fileID: 8189026899448172403, guid: 9c31d763c08a15e489aae94614689bf4, type: 3}
-  _laserPrefab: {fileID: 2511629962768201599, guid: 6d2de97db10784940bc7f21af77ee51e, type: 3}
   _enemyShieldVisualizer: {fileID: 7213749074385802303}
   _movePattern: 3
   _enemyAgroDistance: 3.2
   _enemyAgroSpeed: 2
   _backFire: {fileID: 2157918804738963471, guid: c504384be5f80014da13f972e5fe6431, type: 3}
   _backFireDistance: 6
+  _enemyLaserCastDistance: 8
+  _enemyLaserCastRadius: 0.5
+  _avoidAmount: 2
 --- !u!212 &1061291535968663561
 SpriteRenderer:
   m_ObjectHideFlags: 0

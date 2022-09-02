@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
-{
-    private Player _player;
-    [SerializeField] private Text _scoreText;    
+{    
+    [SerializeField] private Text _bossHitPointsText;
+    [SerializeField] private Text _scoreText;
     [SerializeField] public Text _totalAmmoText;
     [SerializeField] private Image _LivesImg;
     [SerializeField] private Sprite[] _liveSprites;
@@ -14,29 +14,44 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Image _thrusterBarImg;
     [SerializeField] private Text _gameOverText;
     [SerializeField] private Text _restartText;
-    [SerializeField] public Text _initiateWave;
+    [SerializeField] public Text _announceWave;
+    [SerializeField] public Text _announceBoss;
+    [SerializeField] private Text _youWinText;
     private GameManager _gameManager;
+    private Player _player;
 
 
-    // Start is called before the first frame update
+
     void Start()
     {
+        _bossHitPointsText.text = "Boss Hit Points: " + 50 + " / 50";
         _totalAmmoText.text = "Ammo: " + 25 + " / 75";
         _player = GameObject.Find("Player").GetComponent<Player>();
         _scoreText.text = "Score: " + 0;
         _gameOverText.gameObject.SetActive(false);
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
-        _initiateWave.gameObject.SetActive(false);
+        _announceWave.gameObject.SetActive(false);
+        _announceBoss.gameObject.SetActive(false);
 
         if (_gameManager == null)
         {
             Debug.LogError("GameManager is NULL");
         }
+
+        if (_player = null)
+        {
+            Debug.LogError("Player is NULL in UIManager");
+        }
     }
 
-    public void InitiateWave(int nextWave)
+    public void UpdateBoss(int _nextBoss)
     {
-        _initiateWave.text = "Wave: " + nextWave.ToString();
+        _announceBoss.text = "BOSS " + _nextBoss.ToString() + "\n" + "AIM FOR THE FACE!!!";
+    }
+
+    public void UpdateWave(int nextWave)
+    {
+        _announceWave.text = "Wave: " + nextWave.ToString();
     }
 
     public void UpdateAmmo(int playerAmmo)
@@ -49,6 +64,16 @@ public class UIManager : MonoBehaviour
         _scoreText.text = "Score: " + playerScore.ToString();
     }
 
+    public void ShowBossHitPointsText()
+    {
+        _bossHitPointsText.gameObject.SetActive(true);
+    }
+
+    public void UpdateBossHitPoints(int bossHitPoints)
+    {
+        _bossHitPointsText.text = "Boss Hit Points: " + bossHitPoints + " / 50";
+    }
+
     public void UpdateLives(int currentLives)
     {
         _LivesImg.sprite = _liveSprites[currentLives];
@@ -58,13 +83,20 @@ public class UIManager : MonoBehaviour
             GameOverSequence();
         }
     }
+
     public void UpdateThrusterBar(float currentThrusterValue)
     {
-            _thrusterBarImg.sprite = _thrusterBarSprites[(int) currentThrusterValue];
+        _thrusterBarImg.sprite = _thrusterBarSprites[(int)currentThrusterValue];
     }
-    
-    
-    void GameOverSequence()
+
+    public void YouWinSequence()
+    {
+        _youWinText.gameObject.SetActive(true);
+        _restartText.gameObject.SetActive(true);
+        StartCoroutine(YouWinFlickerRoutine());
+    }
+
+    public void GameOverSequence()
     {
         _gameManager.GameOver();
         _gameOverText.gameObject.SetActive(true);
@@ -72,10 +104,9 @@ public class UIManager : MonoBehaviour
         StartCoroutine(GameOverFlickerRoutine());
     }
 
-
     IEnumerator GameOverFlickerRoutine()
     {
-        while(true)
+        while (true)
         {
             _gameOverText.text = "GAME OVER";
             yield return new WaitForSeconds(0.5f);
@@ -85,5 +116,14 @@ public class UIManager : MonoBehaviour
 
     }
 
-
+    IEnumerator YouWinFlickerRoutine()
+    {
+        while (true)
+        {
+            _youWinText.text = "YOU WIN!!!";
+            yield return new WaitForSeconds(0.5f);
+            _youWinText.text = "";
+            yield return new WaitForSeconds(0.5f);
+        }
+    }
 }

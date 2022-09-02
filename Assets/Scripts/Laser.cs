@@ -5,13 +5,13 @@ using UnityEngine;
 public class Laser : MonoBehaviour
 {
     [SerializeField] private float _speed = 8.0f;
-    [SerializeField] private bool _isEnemyLaser = false;
+    public bool isEnemyLaser = false;
     private bool _isBackFire = false;
 
     // Update is called once per frame
     void Update()
     {
-        if (_isEnemyLaser == false || _isBackFire == true)
+        if (isEnemyLaser == false || _isBackFire == true)
         {
             MoveUp();
         }
@@ -53,7 +53,7 @@ public class Laser : MonoBehaviour
 
     public void AssignEnemyLaser()
     {
-        _isEnemyLaser = true;
+        isEnemyLaser = true;
     }
 
     public void AssignBackFire()
@@ -63,7 +63,7 @@ public class Laser : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player") && (_isEnemyLaser == true || _isBackFire == true))
+        if (other.CompareTag("Player") && (isEnemyLaser == true || _isBackFire == true))
         {
             Player player = other.GetComponent<Player>();
 
@@ -72,7 +72,7 @@ public class Laser : MonoBehaviour
                 player.Damage();
             }
         }
-        else if (other.tag == "Powerup" && _isEnemyLaser)
+        else if (other.CompareTag("Powerup") && isEnemyLaser)
         {
             other.GetComponent<Powerup>().PowerupHit();
             Destroy(gameObject);

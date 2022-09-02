@@ -145,7 +145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 8
-  _isEnemyLaser: 0
+  isEnemyLaser: 0
 --- !u!1 &1623188647756329010
 GameObject:
   m_ObjectHideFlags: 0
@@ -324,7 +324,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 8
-  _isEnemyLaser: 0
+  isEnemyLaser: 0
 --- !u!1 &5662094222987580082
 GameObject:
   m_ObjectHideFlags: 0
@@ -470,4 +470,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 8
-  _isEnemyLaser: 0
+  isEnemyLaser: 0

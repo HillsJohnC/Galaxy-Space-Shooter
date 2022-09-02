@@ -59,6 +59,13 @@ public class Enemy : MonoBehaviour
         {
             Debug.LogError("The Collider2D is NULL.");
         }
+
+        _audioSource = GetComponent<AudioSource>();
+
+        if (_audioSource == null)
+        {
+            Debug.LogError("The AudioSource is NULL");
+        }
     }
 
     // Update is called once per frame
@@ -196,27 +203,28 @@ public class Enemy : MonoBehaviour
     IEnumerator AgroColor()
     {
         _spriteRenderer.color = Color.red;
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(.5f);
         _spriteRenderer.color = Color.white;
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(.5f);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Player" && _player != null)
+        if (other.CompareTag("Player") && _player != null)
         {
             EnemyDestroyed();
-            _player.Damage();            
+            _player.Damage();
+            _player.AddScore(2);
         }      
 
-        if (other.tag == "Laser" && _player != null)
+        if (other.CompareTag("Laser") && _player != null)
         {
             Destroy(other.gameObject);
             _player.AddScore(10);
             EnemyDestroyed();
         }
 
-        if (other.CompareTag("HeatSeeker"))
+        if (other.CompareTag("HeatSeeker") && _player != null)
         {
             Destroy(other.gameObject);
             _player.AddScore(50);

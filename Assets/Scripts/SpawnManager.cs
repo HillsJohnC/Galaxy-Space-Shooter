@@ -5,21 +5,22 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour
 {
     [SerializeField] private GameObject[] _enemyPrefab;
+    [SerializeField] private GameObject _enemyBoss1Prefab;
     [SerializeField] private GameObject _enemyContainer;
     [SerializeField] private GameObject[] _powerups;
-    [SerializeField] private int _numberOfEnemies = 10;
+    [SerializeField] private int _numberOfEnemies = 5;
     [SerializeField] private int _enemiesSpawned = 0;
     private bool _stopSpawning = false;
-    private bool _isWaveInitiated = true;
-    private int _waveCount = 1;
+    private bool _isWaveInitiating = true;
+    public int waveCount = 1;
+    private int _nextBoss = 1;
     public int enemiesKilled;
     private UIManager _uiManager;
     private Player _player;
-
     public int[] enemyTable =
     {
-        980,        // Enemy 1
-        20         // Enemy 2
+        700,        // Enemy 1
+        200         // Enemy 2
     };
 
     public int enemyTotal;
@@ -28,14 +29,14 @@ public class SpawnManager : MonoBehaviour
 
     public int[] powerupTable =
     {
-        250,        // Ammo
-        180,        // Speed Boost
-        150,        // Shields
-        135,        // Health
-        105,        // Triple Shot
-        95,         // No Ammo
-        45,         // Tri Pro (Triple Shot Pro)
-        15          // Heat Seeking Missle
+        300,        // Ammo
+        250,        // Speed Boost
+        210,        // Shields
+        170,        // Health
+        120,        // Triple Shot
+        100,         // No Ammo
+        85,         // Tri Pro (Triple Shot Pro)
+        45          // Heat Seeking Missle
     };
 
     public int powerupTotal;
@@ -43,7 +44,7 @@ public class SpawnManager : MonoBehaviour
     private bool _powerupSpawnRestart;
 
     private void Start()
-    {        
+    {
         _player = GameObject.Find("Player").GetComponent<Player>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
 
@@ -76,7 +77,7 @@ public class SpawnManager : MonoBehaviour
         RestartSpawnEnemyRoutine();
     }
 
-    private void Wave()
+    public void Wave()
     {
         if (_enemiesSpawned == _numberOfEnemies)
         {
@@ -89,39 +90,72 @@ public class SpawnManager : MonoBehaviour
             enemiesKilled = 0;
             _enemiesSpawned = 0;
             _numberOfEnemies = (int)Mathf.Round(_numberOfEnemies + _numberOfEnemies / 1.5f);
-            _waveCount++;
-            _isWaveInitiated = true;
+            waveCount++;
+            _isWaveInitiating = true;
             StartSpawning();
         }
-    }
-
+    }    
 
     public void StartSpawning()
     {
-        if (_isWaveInitiated != false && _player != null)
+        if (_player != null)
         {
-            StartCoroutine(InitiateWave());
-        }
-        else
-        {
-            StartCoroutine(SpawnEnemyRoutine());
-            StartCoroutine(SpawnPowerupRoutine());
+
+            if (waveCount >= 4)
+            {
+                StartCoroutine(AnnounceBoss());
+                StartCoroutine(SpawnPowerupRoutine());
+            }
+
+            if (waveCount < 4)
+            {
+
+                if (_isWaveInitiating != false)
+                {
+                    StartCoroutine(AnnounceWave());
+                }
+                else
+                {
+                    _stopSpawning = false;
+                    StartCoroutine(SpawnEnemyRoutine());
+                    StartCoroutine(SpawnPowerupRoutine());
+                }
+            }
         }
     }
 
-    IEnumerator InitiateWave()
+    IEnumerator AnnounceBoss()
     {
-        _uiManager.InitiateWave(_waveCount);
+        _uiManager.UpdateBoss(_nextBoss);
         yield return new WaitForSeconds(1.0f);
-        _uiManager._initiateWave.gameObject.SetActive(true);
+        _uiManager._announceBoss.gameObject.SetActive(true);
         yield return new WaitForSeconds(3.0f);
-        _uiManager._initiateWave.gameObject.SetActive(false);
-        _isWaveInitiated = false;
+        _uiManager._announceBoss.gameObject.SetActive(false);
+        StartCoroutine(SpawnBoss());
+    }
+
+    IEnumerator SpawnBoss()
+    {
+        yield return new WaitForSeconds(2.4f);
+        Vector3 bossSpawnPosition = new Vector3(0f, 11.0f, 0f);
+        GameObject newBoss = Instantiate(_enemyBoss1Prefab, bossSpawnPosition, Quaternion.identity);
+        _uiManager.ShowBossHitPointsText();
+        newBoss.transform.parent = _enemyContainer.transform;
+    }
+
+    IEnumerator AnnounceWave()
+    {
+        _uiManager.UpdateWave(waveCount);
+        yield return new WaitForSeconds(1.0f);
+        _uiManager._announceWave.gameObject.SetActive(true);
+        yield return new WaitForSeconds(3.0f);
+        _uiManager._announceWave.gameObject.SetActive(false);
+        _isWaveInitiating = false;
         StartSpawning();
     }
 
     IEnumerator SpawnEnemyRoutine()
-    {        
+    {
         while (_stopSpawning == false && _enemiesSpawned < _numberOfEnemies)
         {
             yield return new WaitForSeconds(2.3f);
@@ -155,12 +189,12 @@ public class SpawnManager : MonoBehaviour
         {
             _enemySpawnRestart = false;
             StartCoroutine(SpawnEnemyRoutine());
-        }            
+        }
     }
 
     IEnumerator SpawnPowerupRoutine()
-    {        
-        while(_stopSpawning == false)
+    {
+        while (_stopSpawning == false || (waveCount >= 4 && _enemyBoss1Prefab != null))
         {
             yield return new WaitForSeconds(4.0f);
 
@@ -170,7 +204,7 @@ public class SpawnManager : MonoBehaviour
             {
                 if (randomPowerupNumber <= powerupTable[i])
                 {
-                    Vector3 posToSpawn = new Vector3(Random.Range(-8.5f, 8.5f), 7, 0);                    
+                    Vector3 posToSpawn = new Vector3(Random.Range(-8.5f, 8.5f), 7, 0);
                     Instantiate(_powerups[i], posToSpawn, Quaternion.identity);
                     _powerupSpawnRestart = true;
                     yield break;
@@ -192,9 +226,14 @@ public class SpawnManager : MonoBehaviour
             StartCoroutine(SpawnPowerupRoutine());
         }
     }
-    
+
     public void OnPlayerDeath()
     {
         StopAllCoroutines();
+    }
+
+    public void OnBossDeath()
+    {
+        StopAllCoroutines();        
     }
 }

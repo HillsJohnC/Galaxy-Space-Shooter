@@ -9,6 +9,10 @@ TagManager:
   - Enemy_Laser
   - Enemy2
   - Powerup
+  - HeatSeeker
+  - Boss
+  - Shields
+  - LaserBeam
   layers:
   - Default
   - TransparentFX

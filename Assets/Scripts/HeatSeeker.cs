@@ -4,15 +4,20 @@ using UnityEngine;
 
 public class HeatSeeker : MonoBehaviour
 {
-    bool _closestEnemyNull = true;
+    private bool _closestEnemyNull = true;
+    private bool _enemyBossNull = true;
     private Rigidbody2D _rigidbody2D;
     private float _moveSpeed = 8f;
     private float _rotateSpeed = 250f;
+    private GameObject _enemyBoss;
+    private Player _player;
+    private Vector3 _playerPos;
 
     void Start()
     {
         StartCoroutine(DestroyHeatSeeker());
         _rigidbody2D = GetComponent<Rigidbody2D>();
+        _player = GameObject.Find("Player").GetComponent<Player>();
     }
 
     void Update()
