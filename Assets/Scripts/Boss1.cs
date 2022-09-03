@@ -161,11 +161,12 @@ public class Boss1 : MonoBehaviour
 
     private void BossDestroyed()
     {
+        StopAllCoroutines();
         _spawnManager.OnBossDeath();
         _bossCollider.enabled = false;
         _anim.SetTrigger("OnBossDeath");
         _audioSource.Play();
-        Destroy(this.gameObject, 2.0f);
+        Destroy(this.gameObject, 2.5f);
         _uiManager.YouWinSequence();
     }
 
